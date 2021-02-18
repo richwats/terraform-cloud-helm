@@ -52,7 +52,7 @@ provider "aws" {
   secret_key = data.vault_generic_secret.aws-prod.data["secret"]
 }
 
-data "aws_eks_cluster" "example" {
+data "aws_eks_cluster" "eks-1" {
   name = "test-eks-KUrLlzWs"
 }
 
