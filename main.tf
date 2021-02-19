@@ -89,6 +89,6 @@ resource "helm_release" "nginx" {
 
   set {
     name  = "service.type"
-    value = "ClusterIP"
+    value = "LoadBalancer"
   }
 }
