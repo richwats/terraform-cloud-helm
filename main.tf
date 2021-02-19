@@ -3,7 +3,7 @@ terraform {
     hostname = "app.terraform.io"
     organization = "mel-ciscolabs-com"
     workspaces {
-      name = "terraform-cloud-k8s"
+      name = "terraform-cloud-helm"
     }
   }
   required_providers {
@@ -60,16 +60,8 @@ data "aws_eks_cluster_auth" "eks-1" {
   name = "test-eks-KUrLlzWs"
 }
 
-### Kubernetes Provider ###
-# # - Get Kubeconfig
-# provider "kubernetes" {
-#   host                   = data.aws_eks_cluster.eks-1.endpoint
-#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks-1.certificate_authority.0.data)
-#   token                  = data.aws_eks_cluster_auth.eks-1.token
-#   # load_config_file       = false
-#   # version                = "~> 1.11"
-# }
-
+### Helm Provider ###
+# - Use Token from EKS Cluster Auth
 
 provider "helm" {
   kubernetes {
@@ -79,6 +71,11 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.eks-1.token
   }
 }
+
+## Build Application ##
+# - Standard NGNIX Chart from Bitnami Repo
+# - LoadBalancer IP for External Access
+# - Assumes Security Group on Node Group Workers allows access
 
 resource "helm_release" "nginx" {
   namespace   = "default"
